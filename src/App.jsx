@@ -2,15 +2,18 @@ import { useEffect, useState } from 'react'
 import './App.css'
 
 function App() {
-  const [randUUIDArr, setRandUUIDArr] = useState([]);
+  const [idArr, setIdArr] = useState([]);
   const [formData, setFormData] = useState({});
   const [submitted, setSubmitted] = useState(false);
   const [editable, setEditable] = useState(false);
   const [editedFormData, setEditedFormData] = useState({});
 
   useEffect(() => {
-    const arr = Array(6).fill().map(() => crypto.randomUUID());
-    setRandUUIDArr(arr);
+    const arr = Array(6).fill().map((el, idx) => {
+      if (idx === 2 || idx === 5) return (`Password${idx+1}`) 
+      else return (`Text${idx+1}`)
+    } );
+    setIdArr(arr);
   }, [])
   
   const handleChange = (e, item) => {
@@ -23,9 +26,12 @@ function App() {
       setEditedFormData({
         ...editedFormData, [item]: e.target.value
       })
-      // console.log(editedFormData)
     }
   }
+
+  useEffect(() => {
+    console.log(formData);
+  }, [formData])
   
   const handleSubmit = e => {
     e.preventDefault();
@@ -45,7 +51,7 @@ function App() {
       <h2>Inputs</h2>
       <form onSubmit={handleSubmit} className='form'>
         {
-          randUUIDArr.map((item, index) =>
+          idArr.map((item, index) =>
             <div key={item} className='container'>
               <label className='label'>{(index === 2 || index === 5) ? `Password${index+1}` : `Text${index+1}`} </label>
               <input 
